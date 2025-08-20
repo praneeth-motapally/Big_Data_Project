@@ -11,7 +11,8 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo "Installing dependencies"
-                sh 'pip install -r requirements.txt'
+                // Use the absolute path to your pip executable
+                sh 'D:/Big_Data_Project/.venv/Scripts/pip install -r requirements.txt'
             }
         }
 
