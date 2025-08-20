@@ -1,3 +1,5 @@
+def venvPath = 'D:\\Big_Data_Project\\.venv\\Scripts'
+
 pipeline {
     agent any
 
@@ -11,30 +13,27 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo "Installing dependencies"
-                // Use the absolute path to your pip executable
-                sh 'D:/Big_Data_Project/.venv/Scripts/pip install -r requirements.txt'
+                bat "${venvPath}\\pip.exe install -r requirements.txt"
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo "Running tests for transformations"
+                echo "Running tests"
                 script {
                     if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                        sh 'pytest tests/test_transform_data1.py'
+                        bat "${venvPath}\\pytest.exe tests\\test_transform_data1.py"
                     } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
-                        sh 'pytest tests/test_transform_data2.py'
+                        bat "${venvPath}\\pytest.exe tests\\test_transform_data2.py"
                     } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
-                        sh 'pytest tests/test_transform_data3.py'
+                        bat "${venvPath}\\pytest.exe tests\\test_transform_data3.py"
                     } else if (env.BRANCH_NAME == 'feature4-some-few-transformation') {
-                        sh 'pytest tests/test_transform_data4.py'
+                        bat "${venvPath}\\pytest.exe tests\\test_transform_data4.py"
                     } else if (env.BRANCH_NAME == 'feature5-LLM-usage') {
                         echo "No dedicated transform tests for feature5, skipping transform tests"
-                        // Optionally run general tests here if needed:
-                        // sh 'pytest tests/'
                     } else {
                         echo "Unknown branch, running general tests"
-                        sh 'pytest tests/'
+                        bat "${venvPath}\\pytest.exe tests\\"
                     }
                 }
             }
@@ -44,15 +43,15 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                        sh 'python pipelines/pipeline1.py'
+                        bat "${venvPath}\\python.exe pipelines\\pipeline1.py"
                     } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
-                        sh 'python pipelines/pipeline2.py'
+                        bat "${venvPath}\\python.exe pipelines\\pipeline2.py"
                     } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
-                        sh 'python pipelines/pipeline3.py'
+                        bat "${venvPath}\\python.exe pipelines\\pipeline3.py"
                     } else if (env.BRANCH_NAME == 'feature4-some-few-transformation') {
-                        sh 'python pipelines/pipeline4.py'
+                        bat "${venvPath}\\python.exe pipelines\\pipeline4.py"
                     } else if (env.BRANCH_NAME == 'feature5-LLM-usage') {
-                        sh 'python pipelines/pipeline5.py'
+                        bat "${venvPath}\\python.exe pipelines\\pipeline5.py"
                     } else {
                         error "Unknown branch: ${env.BRANCH_NAME}"
                     }
