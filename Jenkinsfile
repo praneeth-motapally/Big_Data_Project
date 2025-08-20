@@ -26,7 +26,7 @@ pipeline {
                     // and use relative paths
                     dir(pwd()) { 
                         if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                            bat "${venvPath}\\pytest.exe tests\\test_transform_data1.py"
+                            bat "${venvPath}\\python.exe -m pipelines.pipeline1"
                         } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
                             bat "${venvPath}\\pytest.exe tests\\test_transform_data2.py"
                         } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
