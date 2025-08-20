@@ -24,7 +24,7 @@ pipeline {
                 script {
                     // Navigate to the workspace root before running
                     // and use relative paths
-                    dir(pwd()) { 
+                     { 
                         if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
                             bat "${venvPath}\\python.exe -m pipelines.pipeline1"
                         } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
