@@ -1,3 +1,5 @@
+def venvPath = 'D:\\Big_Data_Project\\.venv\\Scripts'
+
 pipeline {
     agent any
 
@@ -11,29 +13,33 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo "Installing dependencies"
-                sh 'pip install -r requirements.txt'
+                // This step assumes the requirements.txt file is at the root of the repository
+                bat "${venvPath}\\pip.exe install -r requirements.txt"
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo "Running tests for transformations"
+                echo "Running tests"
                 script {
-                    if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                        sh 'pytest tests/test_transform_data1.py'
-                    } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
-                        sh 'pytest tests/test_transform_data2.py'
-                    } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
-                        sh 'pytest tests/test_transform_data3.py'
-                    } else if (env.BRANCH_NAME == 'feature4-some-few-transformation') {
-                        sh 'pytest tests/test_transform_data4.py'
-                    } else if (env.BRANCH_NAME == 'feature5-LLM-usage') {
-                        echo "No dedicated transform tests for feature5, skipping transform tests"
-                        // Optionally run general tests here if needed:
-                        // sh 'pytest tests/'
-                    } else {
-                        echo "Unknown branch, running general tests"
-                        sh 'pytest tests/'
+                    // Correctly run the tests from the workspace root
+                    // The 'dir' step is essential for Python's module import system
+                    dir(pwd()) {
+                        if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
+                            // Run pytest on the specific test file for the branch
+                            bat "${venvPath}\\pytest.exe tests\\test_transform_data1.py"
+                        } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
+                            bat "${venvPath}\\pytest.exe tests\\test_transform_data2.py"
+                        } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
+                            bat "${venvPath}\\pytest.exe tests\\test_transform_data3.py"
+                        } else if (env.BRANCH_NAME == 'feature4-some-few-transformation') {
+                            bat "${venvPath}\\pytest.exe tests\\test_transform_data4.py"
+                        } else if (env.BRANCH_NAME == 'feature5-LLM-usage') {
+                            echo "No dedicated transform tests for feature5, skipping transform tests"
+                        } else {
+                            echo "Unknown branch, running general tests"
+                            bat "${venvPath}\\pytest.exe tests\\"
+                        }
                     }
                 }
             }
@@ -42,18 +48,22 @@ pipeline {
         stage('Run Pipeline') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                        sh 'python pipelines/pipeline1.py'
-                    } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
-                        sh 'python pipelines/pipeline2.py'
-                    } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
-                        sh 'python pipelines/pipeline3.py'
-                    } else if (env.BRANCH_NAME == 'feature4-some-few-transformation') {
-                        sh 'python pipelines/pipeline4.py'
-                    } else if (env.BRANCH_NAME == 'feature5-LLM-usage') {
-                        sh 'python pipelines/pipeline5.py'
-                    } else {
-                        error "Unknown branch: ${env.BRANCH_NAME}"
+                    // The 'dir' block is correctly placed here
+                    dir(pwd()) {
+                        if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
+                            // Use the -m flag for all scripts to ensure correct package import
+                            bat "${venvPath}\\python.exe -m pipelines.pipeline1"
+                        } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
+                            bat "${venvPath}\\python.exe -m pipelines.pipeline2"
+                        } else if (env.BRANCH_NAME == 'feature3-another-3-tables-transformation') {
+                            bat "${venvPath}\\python.exe -m pipelines.pipeline3"
+                        } else if (env.BRANCH_NAME == 'feature4-some-few-transformation') {
+                            bat "${venvPath}\\python.exe -m pipelines.pipeline4"
+                        } else if (env.BRANCH_NAME == 'feature5-LLM-usage') {
+                            bat "${venvPath}\\python.exe -m pipelines.pipeline5"
+                        } else {
+                            error "Unknown branch: ${env.BRANCH_NAME}"
+                        }
                     }
                 }
             }
