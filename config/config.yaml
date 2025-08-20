@@ -1,0 +1,9 @@
+data:
+  raw_path: "D:\\checking\\BIG_DATA_PROJECT_DATA\\raw"
+  processed_path: "D:\\checking\\BIG_DATA_PROJECT_DATA\\processed"
+
+spark:
+  driver_memory: "6g"
+  executor_memory: "6g"
+  shuffle_partitions: 12
+  spark_ui_port: "4041"
