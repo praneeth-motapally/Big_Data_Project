@@ -4,6 +4,8 @@ from groq import Groq
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 def job_status_transform(job_status_df, config):
     logger = get_logger("Job Status Transform 5")
     logger.info("Starting role extraction for job_status_df using Groq API")
