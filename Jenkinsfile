@@ -3,6 +3,11 @@ def venvPath = 'D:\\Big_Data_Project\\.venv\\Scripts'
 pipeline {
     agent any
 
+    environment {
+        GROQ_API_KEY = credentials('groq-api-key')   // Jenkins credential ID
+        GROQ_MODEL   = 'llama-3.3-70b-versatile'     // You can change if needed
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -13,7 +18,6 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo "Installing dependencies"
-                // This step assumes the requirements.txt file is at the root of the repository
                 bat "${venvPath}\\pip.exe install -r requirements.txt"
             }
         }
@@ -22,11 +26,8 @@ pipeline {
             steps {
                 echo "Running tests"
                 script {
-                    // Correctly run the tests from the workspace root
-                    // The 'dir' step is essential for Python's module import system
                     dir(pwd()) {
                         if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                            // Run pytest on the specific test file for the branch
                             bat "${venvPath}\\pytest.exe tests\\test_transform_data1.py"
                         } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
                             bat "${venvPath}\\pytest.exe tests\\test_transform_data2.py"
@@ -48,10 +49,8 @@ pipeline {
         stage('Run Pipeline') {
             steps {
                 script {
-                    // The 'dir' block is correctly placed here
                     dir(pwd()) {
                         if (env.BRANCH_NAME == 'feature1-data-extraction-and-table-creation') {
-                            // Use the -m flag for all scripts to ensure correct package import
                             bat "${venvPath}\\python.exe -m pipelines.pipeline1"
                         } else if (env.BRANCH_NAME == 'feature2-3-tables-transformation') {
                             bat "${venvPath}\\python.exe -m pipelines.pipeline2"
