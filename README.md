@@ -88,8 +88,10 @@ Example workflow:
 
 ## Final ETL Processed Tables:
 
-<img width="350" height="300" alt="Screenshot 2025-08-25 163919" src="https://github.com/user-attachments/assets/bd228179-630e-46d1-a000-c450ccee97a0" />
+<img width="350" height="350" alt="Screenshot 2025-08-25 163919" src="https://github.com/user-attachments/assets/bd228179-630e-46d1-a000-c450ccee97a0" />
 
+
+ ### Documentation Link: https://drive.google.com/file/d/1x7xxB9BVeTbTcUAE8Fpv0LIvdJC8of__/view?usp=sharing
 
 
 
